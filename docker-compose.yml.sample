@@ -1,0 +1,65 @@
+version: '2'
+
+services:
+  php:
+    image: portfolio
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_LOG_LEVEL=debug
+      - APP_URL=http://localhost
+
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=portfolio
+      - DB_USERNAME=portfolio
+      - DB_PASSWORD=portfolio
+
+      - BROADCAST_DRIVER=log
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_DRIVER=sync
+
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+
+      - MAIL_DRIVER=smtp
+      - MAIL_HOST=mailhog
+      - MAIL_PORT=1025
+      - MAIL_USERNAME=null
+      - MAIL_PASSWORD=null
+      - MAIL_ENCRYPTION=null
+      - MAIL_FROM_ADDRESS=team@ausbildungsportfolio.net
+      - MAIL_FROM_NAME=Ausbildungsportfolio
+
+
+  db:
+    image: mariadb
+    ports:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=portfolio
+      - MYSQL_DATABASE=portfolio
+      - MYSQL_USER=portfolio
+      - MYSQL_PASSWORD=portfolio
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis:
+    image: redis
+    ports:
+      - "6379"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+
+volumes:
+  db-data:

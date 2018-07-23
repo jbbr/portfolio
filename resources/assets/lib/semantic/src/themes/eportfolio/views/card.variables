@@ -1,0 +1,29 @@
+/*******************************
+             Card
+*******************************/
+
+/*-------------------
+         View
+--------------------*/
+
+/* Card */
+@background: @portfolioSecondaryColor;
+@borderRadius: 0;
+@borderShadow: none;
+@boxShadow: none;
+@border: none;
+@borderTop: 3px solid @portfolioPrimaryColor;
+
+/*-------------------
+       Content
+--------------------*/
+
+/* Content */
+@contentPadding: 1.25em 1em;
+
+/* Header */
+@headerColor: white;
+
+/* Description */
+@descriptionDistance: 0;
+@descriptionColor: @headerColor;

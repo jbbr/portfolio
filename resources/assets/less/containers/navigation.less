@@ -1,0 +1,24 @@
+body > .pusher > .content-wrapper > .navigation {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: @navWidth;
+  border-top: 3px solid @navBorderAccentColor;
+
+  a {
+    display: block;
+    background-color: @navItemBackgroundColor;
+    color: @navItemColor;
+    font-size: @navItemFontSize;
+    padding: 17px 20px;
+    border-bottom: 1px dotted @navItemColor;
+
+    &.active {
+      background-color: @navItemActiveBackgroundColor;
+      color: @navItemActiveColor;
+      border-bottom: 1px solid transparent;
+    }
+  }
+}
+
+

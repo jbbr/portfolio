@@ -1,0 +1,106 @@
+variables:
+    CI_PROJECT_NAME: portfolio
+    CONTAINER_TEST_IMAGE: docker.rz.tu-harburg.de:5000/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_PIPELINE_ID
+    CONTAINER_RELEASE_IMAGE: docker.rz.tu-harburg.de:5000/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+    COLON: ':'
+
+stages:
+    - build
+    - review
+    - deploy
+    - production
+
+build_review_image:
+    stage: build
+    before_script:
+        - git submodule update --init --recursive
+    only:
+        - tags
+        - triggers
+        - branches
+    except:
+        - master
+    tags:
+        - build
+    script:
+        - pwd
+        - sudo docker build --no-cache --pull -t $CONTAINER_TEST_IMAGE .
+        - sudo docker push $CONTAINER_TEST_IMAGE
+        
+build_image:
+    stage: build
+    before_script:
+        - git submodule update --init --recursive
+    only:
+        - master
+    tags:
+        - build
+    script:
+        - sudo docker build --no-cache --pull -t $CONTAINER_TEST_IMAGE .
+        - sudo docker push $CONTAINER_TEST_IMAGE
+
+start_review:
+    stage: review
+    retry: 2
+    script:
+        - whoami
+        - pwd
+        - perl -pe 's/\$\{CI_ENVIRONMENT_SLUG\}/$ENV{CI_ENVIRONMENT_SLUG}/g; s/\$\{CONTAINER_TEST_IMAGE\}/$ENV{CONTAINER_TEST_IMAGE}/g; s/\$\{CI_ENVIRONMENT_SLUG\}/$ENV{CI_ENVIRONMENT_SLUG}/g; s/\$\{DB_USERNAME\}/$ENV{REVIEW_DB_USERNAME}/g; s/\$\{DB_PASSWORD\}/$ENV{REVIEW_DB_PASSWORD}/g; s/\$\{MYSQL_ROOT_PASSWORD\}/$ENV{REVIEW_MYSQL_ROOT_PASSWORD}/g;' ./docker/docker-compose.template > ./docker/docker-compose.yml
+        - sudo docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml down
+        - sudo docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml up -d
+    environment:
+        name: review/${CI_COMMIT_REF_NAME}
+        url: http://${CI_ENVIRONMENT_SLUG}.collaborating.tuhh.de
+        on_stop: stop_review
+    only:
+        - branches
+    tags:
+        - ssg
+    except:
+        - master
+
+stop_review:
+    stage: review
+    retry: 2
+    variables:
+        GIT_STRATEGY: none
+    script:
+        - sudo docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml down
+    when: manual
+    environment:
+        name: review/${CI_COMMIT_REF_NAME}
+        action: stop
+    only:
+        - branches
+    tags:
+        - ssg
+    except:
+        - master
+
+deploy to registry:
+    stage: deploy
+    script:
+        - sudo docker pull $CONTAINER_TEST_IMAGE
+        - sudo docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+        - sudo docker push $CONTAINER_RELEASE_IMAGE
+    tags:
+        - deploy
+    only:
+        - master
+
+# Das Projekt sollte nur als Basis dienen.
+# siehe Dockerfile in https://collaborating.tuhh.de/itbh/portfolio-team-tfa/portfolio-kompetenzwerkstatt
+# dort wird dieses Image beerbt und kundenspezfische Anpassungen vorgenommen
+.deploy to production:
+    stage: production
+    script:
+        - ssh fizban.rz.tu-harburg.de -p 2222 "sudo docker pull ${CONTAINER_RELEASE_IMAGE}"
+        - ssh fizban.rz.tu-harburg.de -p 2222 "sudo systemctl restart docker-itbh--portfolio-team--neuentwicklung-portfolio.service"
+    tags:
+        - deploy
+    environment:
+        name: production
+        url: http://laurana09.rz.tu-harburg.de/
+    only:
+        - master
+    when: manual

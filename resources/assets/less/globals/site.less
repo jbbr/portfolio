@@ -1,0 +1,141 @@
+@import "../colors";
+
+body > .pusher {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    position: relative;
+    padding: 30px 0;
+    background-color: @bodyBackgroundColor;
+    flex-grow: 1;
+}
+
+h1 {
+    font-weight: normal;
+    color: @h1Color;
+
+    .small {
+        font-size: 18px;
+    }
+}
+
+h1 a,
+h2 a,
+h3 a {
+    color: inherit;
+}
+
+h1 a:hover,
+h2 a:hover,
+h3 a:hover {
+    color: inherit;
+    text-decoration: underline;
+}
+
+h2.green.colored {
+    color: @h1Color;
+    font-weight: normal;
+    font-size: 1.5rem;
+}
+
+label {
+    font-size: 16px;
+    color: @labelColor;
+
+    &.small.font {
+        font-size: 14px;
+    }
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.button.link {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    color: @portfolioPrimaryColor;
+    text-decoration: none;
+}
+
+.text {
+    &.center.aligned {
+        text-align: center;
+    }
+
+    &.left.aligned {
+        text-align: left;
+    }
+
+    &.right.aligned {
+        text-align: right;
+    }
+}
+
+.cta-text {
+    width: 100%;
+    font-size: 1.1em;
+    text-align: center;
+    line-height: 1.7;
+    padding: 2rem 0;
+}
+
+.popup .content {
+    white-space: nowrap;
+}
+
+.ui.grid > .row > [class*="half wide"].column,
+.ui.grid > .column.row > [class*="half wide"].column,
+.ui.grid > [class*="half wide"].column,
+.ui.column.grid > [class*="half wide"].column {
+    width: 3.125% !important;
+}
+
+.placeholder-175-170 {
+    border-radius: 0.125rem;
+    background-color: #f2f2f2;
+    width: 175px;
+    height: 169px;
+}
+
+.pt-0 {
+    padding-top: 0 !important;
+}
+
+.pb-0 {
+    padding-bottom: 0 !important;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
+}
+
+.pr-0 {
+    padding-right: 0 !important;
+}
+
+.branding img {
+    max-height: 100px;
+}
+
+i.inverted.bordered.icon.primary, i.inverted.circular.icon.primary {
+    background-color: @portfolioPrimaryColor !important;
+}
+
+i.inverted.bordered.icon.secondary, i.inverted.circular.icon.secondary {
+    background-color: @portfolioSecondaryColor !important;
+}
+
+a[disabled],
+a.disabled,
+a[disabled]:active,
+a.disabled:active,
+a[disabled]:hover,
+a.disabled:hover {
+    pointer-events: none;
+    color: #e8e8e8;
+}

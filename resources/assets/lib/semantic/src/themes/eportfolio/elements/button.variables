@@ -1,0 +1,14 @@
+/*******************************
+    User Variable Overrides
+*******************************/
+
+/*-------------------
+      Variations
+--------------------*/
+
+/* Ordinality */
+@primaryColor: @portfolioPrimaryColor;
+@primaryTextColor: white;
+
+@secondaryColor: @portfolioSecondaryColor;
+@secondaryTextColor: white;

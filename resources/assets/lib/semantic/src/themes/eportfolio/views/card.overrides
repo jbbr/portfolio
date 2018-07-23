@@ -1,0 +1,38 @@
+/*******************************
+         Theme Overrides
+*******************************/
+
+/*--------------
+      Card
+---------------*/
+
+.ui.cards > .card,
+.ui.card {
+  border-top: @borderTop;
+  width: 100%;
+}
+
+/*--------------
+     Content
+---------------*/
+
+.ui.cards > .card > .content > .header,
+.ui.card > .content > .header {
+  display: block;
+  height: auto;
+  padding: 0;
+  color: @headerColor;
+  background: none;
+  text-align: center;
+}
+
+/*--------------
+   Description
+---------------*/
+
+.ui.cards > .card > .content > .description,
+.ui.card > .content > .description {
+  clear: both;
+  color: @descriptionColor;
+  text-align: center;
+}
