@@ -121,7 +121,7 @@ class PublishController extends Controller
     {
         $publish = Publish::where('url', $urlkey)->firstOrFail();
 
-        if ($publish->created_at->addDays(1) < Carbon::now()) {
+        if ($publish->created_at->addDays(30) < Carbon::now()) {
             return false;
         }
         return $publish;
