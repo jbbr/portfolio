@@ -42,7 +42,7 @@
         {!! str_replace("src=\"/storage/media/", "src=\"". url()->to("/") . "/storage/media/", $_entry->description) !!}
     </div>
 
-    @include('export.pdf.entry-media')
+    @include('export.pdf_tfa.entry-media')
 
     <div class="entry-footer">
         @if( $type == "explicit")
