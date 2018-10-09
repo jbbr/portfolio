@@ -34,6 +34,12 @@
                 <span class="value">{{ $_entry->wordcount }}</span>
             </div>
             <div class="clearer"></div>
+
+            <div class="left floated width-100">
+                <span class="title">Titel:</span>
+                <span class="value">{{ $_entry->title }}</span>
+            </div>
+            <div class="clearer"></div>
         </div>
 
 
