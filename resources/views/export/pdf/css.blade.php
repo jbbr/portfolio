@@ -260,7 +260,7 @@
     }
 
     .profile.second .logo {
-        padding-left: 50px;
+        padding-left: 45px;
     }
 
     .profile.second .sub_title {
