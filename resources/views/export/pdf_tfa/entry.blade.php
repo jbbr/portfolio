@@ -27,7 +27,13 @@
 
             <div class="left floated width-50">
                 <span class="title">Datum:</span>
-                <span class="value">{{ \Carbon\Carbon::parse($_entry->date)->format('d.m.Y') }}</span>
+                <span class="value">
+                    {{ \Carbon\Carbon::parse($_entry->date)->format('d.m.Y') }}
+                    @if($_entry->date_to)
+                        -
+                        {{ \Carbon\Carbon::parse($_entry->date_to)->format('d.m.Y') }}
+                    @endif
+                </span>
             </div>
             <div class="left floated width-50">
                 <span class="title">Anzahl der Wörter:</span>
