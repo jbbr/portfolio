@@ -15,5 +15,6 @@ php artisan migrate
 # des Containers in den Container "gemountet" wird. Die Berechtigungen für
 # dieses Verzeichnis müssen korrigiert werden
 chown -R www-data:www-data /var/www/html/storage
+chown -R www-data:www-data /var/www/html/resources/assets
 
 php-fpm & caddy
