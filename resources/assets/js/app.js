@@ -511,8 +511,10 @@ $(function () {
             var id = '#' + $(this).attr('id');
 
             // initialize the iro colorpicker
-            var ciColorpicker = new iro.ColorPicker(id, {
-                color: defaultColor
+            var ciColorpicker = new iro.default.ColorPicker(id, {
+                color: defaultColor,
+                width: 320,
+                height: 320,
             });
 
             ciColorpicker.on('color:change', function (color, changes) {

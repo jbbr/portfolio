@@ -1,5 +1,5 @@
 <div class="profile second">
-    <div class="logo"><img src="{{ asset('/images/pdf-logo.png') }}" /></div>
+    <div class="logo"><img style="height: 150px; width: auto;" src="{{ url((new \App\Config())->getConfigPictureUrl('system_logo', asset('images/logo.png')))}}"></div>
     <div class="sub_title">Berichtsheft (Ausbildungsnachweis)</div>
     <div class="informations">
         <div class="block">Auszubildende/r:  {{ Auth::user()->name }}</div>

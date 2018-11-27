@@ -7,7 +7,7 @@ Folgende Aufgabenbereiche werden importiert:
         </li>
     </ul>
 @endforeach
-<form method="POST" action="{{ route('portfolios.import') }}">
+<form method="POST" action="{{ route('portfolios.import', [], false) }}">
     {{ csrf_field() }}
     <input type="hidden" name="code" value="{{ $code }}">
 </form>

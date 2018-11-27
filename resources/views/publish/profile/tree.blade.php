@@ -104,6 +104,7 @@
                         <div class="four wide column"></div>
                         <div class="twelve wide column">
                             <button type="submit" class="ui primary button">Neue Freigabe erzeugen</button>
+                            Die Freigabe ist für 30 Tage erreichbar.
                         </div>
                     </div>
                 </div>

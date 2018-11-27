@@ -10,8 +10,8 @@
                         <?php $asset = asset($_integrate->media->getImagePath('285x180')); ?>
                     @endif
 
-                    <div class="image"
-                         style="background-image: url({{ $asset }});"></div>
+                    <img class="image"
+                         src="{{ $asset }}" />
                     <div class="desc">{{ $_integrate->media->filename }}</div>
                 </div>
                 @break(!$loop->first && $loop->index === 1)

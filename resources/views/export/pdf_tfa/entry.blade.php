@@ -27,11 +27,23 @@
 
             <div class="left floated width-50">
                 <span class="title">Datum:</span>
-                <span class="value">{{ \Carbon\Carbon::parse($_entry->date)->format('d.m.Y') }}</span>
+                <span class="value">
+                    {{ \Carbon\Carbon::parse($_entry->date)->format('d.m.Y') }}
+                    @if($_entry->date_to)
+                        -
+                        {{ \Carbon\Carbon::parse($_entry->date_to)->format('d.m.Y') }}
+                    @endif
+                </span>
             </div>
             <div class="left floated width-50">
                 <span class="title">Anzahl der Wörter:</span>
                 <span class="value">{{ $_entry->wordcount }}</span>
+            </div>
+            <div class="clearer"></div>
+
+            <div class="left floated width-100">
+                <span class="title">Titel:</span>
+                <span class="value">{{ $_entry->title }}</span>
             </div>
             <div class="clearer"></div>
         </div>
@@ -42,7 +54,7 @@
         {!! str_replace("src=\"/storage/media/", "src=\"". url()->to("/") . "/storage/media/", $_entry->description) !!}
     </div>
 
-    @include('export.pdf.entry-media')
+    @include('export.pdf_tfa.entry-media')
 
     <div class="entry-footer">
         @if( $type == "explicit")
