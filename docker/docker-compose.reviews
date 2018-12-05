@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  php:
+  app:
     image: ${CONTAINER_TEST_IMAGE}
     depends_on:
       - db
