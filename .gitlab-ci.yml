@@ -1,106 +1,125 @@
 variables:
-    CI_PROJECT_NAME: portfolio
-    CONTAINER_TEST_IMAGE: docker.rz.tu-harburg.de:5000/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:$CI_PIPELINE_ID
-    CONTAINER_RELEASE_IMAGE: docker.rz.tu-harburg.de:5000/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
-    COLON: ':'
+    CONTAINER_REGISTRY: collaborating.tuhh.de:5005
+    CONTAINER_TEST_IMAGE: ${CONTAINER_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
+    CONTAINER_RELEASE_IMAGE: ${CONTAINER_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:latest
+    BASE_IMAGE: ${CONTAINER_REGISTRY}/itbh/portfolio-team/docker
+    DOCKER_FILE_PATH: .
+
+.before_script_template:
+    before_script:  &before_script_definition
+        - cp ./docker/docker-compose.reviews ./docker/docker-compose.yml
+        - docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml config
+        - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CONTAINER_REGISTRY}
+        - docker pull ${BASE_IMAGE}
 
 stages:
-    - build
+    - tests
     - review
     - deploy
-    - production
+    #- live
+    - linkchecker
 
-build_review_image:
-    stage: build
-    before_script:
-        - git submodule update --init --recursive
-    only:
-        - tags
-        - triggers
-        - branches
-    except:
-        - master
+tests:
+    stage: tests
     tags:
-        - build
+        - floki_development
+    #before_script: *before_script_definition
     script:
-        - pwd
-        - sudo docker build --no-cache --pull -t $CONTAINER_TEST_IMAGE .
-        - sudo docker push $CONTAINER_TEST_IMAGE
-        
-build_image:
-    stage: build
-    before_script:
-        - git submodule update --init --recursive
-    only:
-        - master
-    tags:
-        - build
-    script:
-        - sudo docker build --no-cache --pull -t $CONTAINER_TEST_IMAGE .
-        - sudo docker push $CONTAINER_TEST_IMAGE
+        - exit 0
 
 start_review:
     stage: review
-    retry: 2
+    before_script: *before_script_definition
     script:
-        - whoami
-        - pwd
-        - perl -pe 's/\$\{CI_ENVIRONMENT_SLUG\}/$ENV{CI_ENVIRONMENT_SLUG}/g; s/\$\{CONTAINER_TEST_IMAGE\}/$ENV{CONTAINER_TEST_IMAGE}/g; s/\$\{CI_ENVIRONMENT_SLUG\}/$ENV{CI_ENVIRONMENT_SLUG}/g; s/\$\{DB_USERNAME\}/$ENV{REVIEW_DB_USERNAME}/g; s/\$\{DB_PASSWORD\}/$ENV{REVIEW_DB_PASSWORD}/g; s/\$\{MYSQL_ROOT_PASSWORD\}/$ENV{REVIEW_MYSQL_ROOT_PASSWORD}/g;' ./docker/docker-compose.template > ./docker/docker-compose.yml
-        - sudo docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml down
-        - sudo docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml up -d
+        # Project specific
+        - export SECRET_KEY=$(openssl rand -base64 12)
+        - export HOST_IP=$(gethostip -d $(hostname --fqdn))
+        - docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml build --no-cache --force-rm
+        - docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml down
+        - docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml up -d
+        - mkdir -p ./_linkchecker
+        - echo "https://${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}.hpn.rz.tuhh.de/" >./_linkchecker/url
+    artifacts:
+        name: "${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}"
+        expire_in: 1 week
+        paths:
+            - ./_linkchecker
     environment:
-        name: review/${CI_COMMIT_REF_NAME}
-        url: http://${CI_ENVIRONMENT_SLUG}.collaborating.tuhh.de
+        name: ${CI_COMMIT_REF_NAME}
+        url: https://${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}.hpn.rz.tuhh.de/
         on_stop: stop_review
     only:
         - branches
     tags:
-        - ssg
+        - floki_development
     except:
         - master
 
 stop_review:
     stage: review
-    retry: 2
     variables:
         GIT_STRATEGY: none
     script:
-        - sudo docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml down
+        - cp ./docker/docker-compose.reviews ./docker/docker-compose.yml
+        - docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml down
     when: manual
     environment:
-        name: review/${CI_COMMIT_REF_NAME}
+        name: ${CI_COMMIT_REF_NAME}
         action: stop
     only:
         - branches
     tags:
-        - ssg
+        - floki_development
     except:
         - master
 
-deploy to registry:
+deploy_registry:
     stage: deploy
+    before_script: *before_script_definition
     script:
-        - sudo docker pull $CONTAINER_TEST_IMAGE
-        - sudo docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
-        - sudo docker push $CONTAINER_RELEASE_IMAGE
+        - docker build --no-cache --pull -t ${CONTAINER_RELEASE_IMAGE} ${DOCKER_FILE_PATH}
+        - docker push ${CONTAINER_RELEASE_IMAGE}
     tags:
-        - deploy
+        - floki_build
     only:
         - master
+        
+# deploy_live:
+#     stage: live
+#     script:
+#         - ssh raistlin.rz.tu-harburg.de -p 22 "sudo docker pull ${CONTAINER_RELEASE_IMAGE}"
+#         - ssh raistlin.rz.tu-harburg.de -p 22 "sudo systemctl restart docker-1194--digital-learning-lab"
+#     tags:
+#         - deploy
+#     environment:
+#         name: production
+#         url: https://digitallearninglab.de/
+#     only:
+#         - master
+#     when: manual
 
-# Das Projekt sollte nur als Basis dienen.
-# siehe Dockerfile in https://collaborating.tuhh.de/itbh/portfolio-team-tfa/portfolio-kompetenzwerkstatt
-# dort wird dieses Image beerbt und kundenspezfische Anpassungen vorgenommen
-.deploy to production:
-    stage: production
-    script:
-        - ssh fizban.rz.tu-harburg.de -p 2222 "sudo docker pull ${CONTAINER_RELEASE_IMAGE}"
-        - ssh fizban.rz.tu-harburg.de -p 2222 "sudo systemctl restart docker-itbh--portfolio-team--neuentwicklung-portfolio.service"
-    tags:
-        - deploy
-    environment:
-        name: production
-        url: http://laurana09.rz.tu-harburg.de/
-    only:
+linkchecker:intern:
+    stage: linkchecker
+    except:
         - master
     when: manual
+    image:
+        name: linkchecker/linkchecker
+        entrypoint: [""]
+    script:
+        - echo "PLEASE be patient, the application may take a few minutes before it is available."
+        - cat ./_linkchecker/url
+        - linkchecker --recursion-level 10 --threads 10 --no-status --no-robots --no-warnings --ignore-url 'https://fonts.gstatic.com/{0,1}$' $(cat ./_linkchecker/url)
+        
+linkchecker:all:
+    stage: linkchecker
+    except:
+        - master
+    when: manual
+    image:
+        name: linkchecker/linkchecker
+        entrypoint: [""]
+    script:
+        - echo "PLEASE be patient, the application may take a few minutes before it is available."
+        - cat ./_linkchecker/url
+        - linkchecker --recursion-level 10 --threads 10 --no-status --no-robots --no-warnings --check-extern --ignore-url 'https://fonts.gstatic.com/{0,1}$' $(cat ./_linkchecker/url)
