@@ -8,7 +8,11 @@ services:
       dockerfile: ./Dockerfile
     restart: 'always'
     depends_on:
-      - db
+        - db
+    links:
+       - db
+    security_opt:
+      - no-new-privileges
     environment:
       - VIRTUAL_HOST=${CI_ENVIRONMENT_SLUG}
       - APP_ENV=local
