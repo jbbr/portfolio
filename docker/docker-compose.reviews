@@ -2,7 +2,11 @@ version: '2'
 
 services:
   app:
-    image: ${CONTAINER_TEST_IMAGE}
+    image: '${CI_PROJECT_PATH_SLUG}:${CI_COMMIT_REF_SLUG}'
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+    restart: 'always'
     depends_on:
       - db
     environment:
@@ -36,6 +40,7 @@ services:
       - MAIL_ENCRYPTION=null
       - MAIL_FROM_ADDRESS=nobody@tuhh.de
       - MAIL_FROM_NAME='Ausbildungsportfolio ${CI_ENVIRONMENT_SLUG}'
+    mem_limit: 512MB
 
   db:
     image: mariadb:latest
@@ -46,6 +51,7 @@ services:
       - MYSQL_DATABASE=portfolio
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
+    mem_limit: 512MB
 
   redis:
     image: redis:3
