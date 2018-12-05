@@ -20,8 +20,8 @@ services:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_DATABASE=portfolio
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USERNAME='7x4zxwKihKYD3Ew3MXbexC'
+      - DB_PASSWORD='o4UtJEFA5rUExa7DNxuriu'
 
       - BROADCAST_DRIVER=log
       - CACHE_DRIVER=redis
@@ -33,7 +33,7 @@ services:
       - REDIS_PORT=6379
 
       - MAIL_DRIVER=smtp
-      - MAIL_HOST=fizban.rz.tu-harburg.de
+      - MAIL_HOST=floki.rz.tuhh.de
       - MAIL_PORT=25
       - MAIL_USERNAME=null
       - MAIL_PASSWORD=null
@@ -47,10 +47,10 @@ services:
     ports:
       - "3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD='wgBVovVonZiDT2ft6DpfZ8'
       - MYSQL_DATABASE=portfolio
-      - MYSQL_USER=${DB_USERNAME}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER='7x4zxwKihKYD3Ew3MXbexC'
+      - MYSQL_PASSWORD='o4UtJEFA5rUExa7DNxuriu'
     mem_limit: 512MB
 
   redis:
@@ -58,17 +58,4 @@ services:
     ports:
       - "6379"
 
-  #admin:
-  #  image: 'phpmyadmin/phpmyadmin:latest'
-  #  labels:
-  #    systemd-service: ''
-  #  ports:
-  #      - '64081:80'
-  #  depends_on:
-  #      - db
-  #  mem_limit: 512MB
-  #    
-  #mailhog:
-  #  image: mailhog/mailhog
-  #  ports:
-  #    - "60001:8025"
+
