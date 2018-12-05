@@ -2,6 +2,7 @@ variables:
     CONTAINER_REGISTRY: collaborating.tuhh.de:5005
     CONTAINER_TEST_IMAGE: ${CONTAINER_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
     CONTAINER_RELEASE_IMAGE: ${CONTAINER_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:latest
+    BASE_IMAGE: ${CONTAINER_REGISTRY}/itbh/portfolio-team/docker
     DOCKER_FILE_PATH: .
 
 .before_script_template:
@@ -9,6 +10,7 @@ variables:
         - cp ./docker/docker-compose.reviews ./docker/docker-compose.yml
         - docker-compose -p ${CI_PROJECT_PATH_SLUG}-${CI_ENVIRONMENT_SLUG} -f ./docker/docker-compose.yml config
         - docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CONTAINER_REGISTRY}
+        - docker pull ${BASE_IMAGE}
 
 stages:
     - tests
