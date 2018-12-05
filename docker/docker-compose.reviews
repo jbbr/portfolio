@@ -38,7 +38,7 @@ services:
       - MAIL_FROM_NAME='Ausbildungsportfolio ${CI_ENVIRONMENT_SLUG}'
 
   db:
-    image: docker.rz.tu-harburg.de:5000/docker/mariadb:latest
+    image: mariadb:latest
     ports:
       - "3306"
     environment:
