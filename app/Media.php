@@ -261,8 +261,10 @@ class Media extends Model
 
         // Map Files to letters
         $letters = [];
+        $currLetter = 'A';
         for ($i = 0; $i < count($files); $i++) {
-            $letters[$files[$i]] = chr(ord('A') + $i);
+            $letters[$files[$i]] = $currLetter;
+            $currLetter++;
         }
         $files = array_combine($files, $letters);
 
