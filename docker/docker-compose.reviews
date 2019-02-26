@@ -3,6 +3,8 @@ version: '2'
 services:
   app:
     image: '${CI_PROJECT_PATH_SLUG}:${CI_COMMIT_REF_SLUG}'
+    labels:
+      ONLINE_JOURNALCTL: 'true'
     build:
       context: ../
       dockerfile: ./Dockerfile
