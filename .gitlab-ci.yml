@@ -87,12 +87,10 @@ deploy_registry:
     only:
         - master
         
-deploy_public_registry:
+.deploy_public_registry:
     stage: deploy
-    #before_script: *before_script_definition
+    before_script: *before_script_definition
     script:
-        - docker logout ${CONTAINER_REGISTRY}
-        - docker login  ${CONTAINER_REGISTRY}
         - docker pull ${CONTAINER_RELEASE_IMAGE}
         - docker tag ${CONTAINER_RELEASE_IMAGE} ${CONTAINER_REGISTRY}/itbh/lernreflexion-und-kompetenzentwicklung/portfolio
         - docker push ${CONTAINER_REGISTRY}/itbh/lernreflexion-und-kompetenzentwicklung/portfolio
