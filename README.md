@@ -7,7 +7,8 @@ Notwendige Voraussetzungen sind [Docker CE](https://docs.docker.com/install/) un
 #### Erstellen eines Verzeichnisses für die Portfolio Docker Compose Konfiguration 
 
 ```
-mkdir ~/portfolio && cd ~/portfolio
+mkdir ~/portfolio
+cd ~/portfolio
 ```
 
 #### Kopieren der folgenden Konfiguration in die Datei `docker-compose.yml` im Verzeichnis `~/portfolio`
