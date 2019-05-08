@@ -1,4 +1,8 @@
-FROM collaborating.tuhh.de:5005/itbh/portfolio-team/docker
+ARG BASE_IMAGE=collaborating.tuhh.de:5005/itbh/portfolio-team/portfolio-docker-base
+
+FROM ${BASE_IMAGE}
+
+#FROM collaborating.tuhh.de:5005/itbh/portfolio-team/docker
 
 # Copy project to /var/www/html
 WORKDIR /var/www/html
