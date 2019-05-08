@@ -1,4 +1,4 @@
-FROM collaborating.tuhh.de:5005/itbh/portfolio-team/docker
+FROM collaborating.tuhh.de:5005/itbh/portfolio-team/portfolio-docker-base
 
 # Copy project to /var/www/html
 WORKDIR /var/www/html
