@@ -2,7 +2,7 @@ variables:
     CONTAINER_REGISTRY: collaborating.tuhh.de:5005
     CONTAINER_TEST_IMAGE: ${CONTAINER_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
     CONTAINER_RELEASE_IMAGE: ${CONTAINER_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:latest
-    BASE_IMAGE: ${CONTAINER_REGISTRY}/itbh/portfolio-team/docker
+    BASE_IMAGE: ${CONTAINER_REGISTRY}/itbh/portfolio-team/portfolio-docker-base
     DOCKER_FILE_PATH: .
 
 .before_script_template:
@@ -77,7 +77,7 @@ deploy_registry:
     stage: deploy
     before_script: *before_script_definition
     script:
-        - docker build --no-cache --pull -t ${CONTAINER_RELEASE_IMAGE} ${DOCKER_FILE_PATH}
+        - docker build --no-cache --pull --build-arg BASE_IMAGE=collaborating.tuhh.de:5005/itbh/portfolio-team/portfolio-docker-base -t ${CONTAINER_RELEASE_IMAGE} ${DOCKER_FILE_PATH}
         - docker push ${CONTAINER_RELEASE_IMAGE}
 
     tags:
