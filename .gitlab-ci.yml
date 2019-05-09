@@ -77,10 +77,22 @@ deploy_registry:
     stage: deploy
     before_script: *before_script_definition
     script:
-        - docker build --no-cache --pull -t ${CONTAINER_RELEASE_IMAGE} ${DOCKER_FILE_PATH}
+        - docker build --no-cache --pull --build-arg BASE_IMAGE=collaborating.tuhh.de:5005/itbh/portfolio-team/portfolio-docker-base -t ${CONTAINER_RELEASE_IMAGE} ${DOCKER_FILE_PATH}
         - docker push ${CONTAINER_RELEASE_IMAGE}
-        - docker tag ${CONTAINER_RELEASE_IMAGE} ${CONTAINER_REGISTRY}:/itbh/lernreflexion-und-kompetenzentwicklung/portfolio
-        - docker push ${CONTAINER_REGISTRY}:/itbh/lernreflexion-und-kompetenzentwicklung/portfolio
+
+    tags:
+        - floki_build
+    only:
+        - master
+        
+.deploy_public_registry:
+    stage: deploy
+    before_script: *before_script_definition
+    script:
+        - docker pull ${CONTAINER_RELEASE_IMAGE}
+        - docker tag ${CONTAINER_RELEASE_IMAGE} ${CONTAINER_REGISTRY}/itbh/lernreflexion-und-kompetenzentwicklung/portfolio
+        - docker push ${CONTAINER_REGISTRY}/itbh/lernreflexion-und-kompetenzentwicklung/portfolio
+
     tags:
         - floki_build
     only:
