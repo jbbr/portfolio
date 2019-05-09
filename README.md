@@ -54,6 +54,7 @@ services:
       - MAIL_FROM_ADDRESS=team@ausbildungsportfolio.net
       - MAIL_FROM_NAME=Ausbildungsportfolio
 
+
   db:
     image: mariadb
     ports:
@@ -76,18 +77,37 @@ services:
     ports:
       - "8025:8025"
 
+  admin:
+    image: 'phpmyadmin/phpmyadmin'
+    ports:
+      - '8030:80'
+    depends_on:
+      - db
+    links:
+      - db
+    mem_limit: 512MB
+
 volumes:
   db-data:
+
 ```
 
 #### Starten der Umgebung
 
 ```
+cd ~/portfolio
 docker-compose up
 ```
 
 #### Account registrieren
 
-- Im Browser die URLs localhost:8080 und localhost:8025 öffnen.
-- Unter localhost:8080 einen Account anlegen
-- unter localhost:8025 in der Bestätigungsmail den Account bestätigen
+- Im Browser die URLs `localhost:8080` und `localhost:8025` öffnen.
+- Unter `localhost:8080` einen Account anlegen
+- unter `localhost:8025` findet sich die Anwendung *MailHog*, in der die Bestätigungsmail für den Account bestätigt werden muss. Natürlich ist das auch durch das direkte Bearbeiten eines Accounts möglich, ähnlich dem Vorgehen, wie unter **Bereits registrierten Account auf Admin hochstufen** beschrieben.
+
+#### Bereits registrierten Account auf Admin hochstufen
+
+- Im Browser die URL `localhost:8030` öffnen.
+- Unter `localhost:8030` findet sich die Anwendung *phpMyAdmin*
+- Mit den Zugangsdaten anmelden, die in der Datei `docker-compose.yml` für den Zugang zur Datenbank definiert sind
+- In der Tabelle `portfolio.users` dem gewünschten Account im Feld `is_admin` eine `1` eintragen
