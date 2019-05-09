@@ -85,3 +85,9 @@ volumes:
 ```
 docker-compose up
 ```
+
+#### Account registrieren
+
+- Im Browser die URLs localhost:8080 und localhost:8025 öffnen.
+- Unter localhost:8080 einen Account anlegen
+- unter localhost:8025 in der Bestätigungsmail den Account bestätigen
