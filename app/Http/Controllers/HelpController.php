@@ -9,15 +9,15 @@ class HelpController extends Controller
 {
     public function help(Request $request)
     {
-        $baseUrl = 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-hilfe';
+        $baseUrl = 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe';
 
         $url = $baseUrl . $request->get('url');
         $html = file_get_contents($url);
 
         $crawler = new Crawler($html);
         $data = trim($crawler->filter('body > div > div.book-body > div > div.page-wrapper > div')->first()->html());
-        $data = str_replace('href="', 'href="https://fizban05.rz.tu-harburg.de/itbh/portfolio-hilfe/', $data);
-        $data = str_replace('src="', 'src="https://fizban05.rz.tu-harburg.de/itbh/portfolio-hilfe/media/', $data);
+        $data = str_replace('href="', 'href="https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe/', $data);
+        $data = str_replace('src="', 'src="https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe/media/', $data);
 
         return $data;
     }
