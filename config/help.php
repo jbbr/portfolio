@@ -1,6 +1,6 @@
 <?php
 
-$url = 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-hilfe';
+$url = 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe';
 
 return [
     'dashboard' => $url . '/dashboard/hilfe_dashboard.html',
