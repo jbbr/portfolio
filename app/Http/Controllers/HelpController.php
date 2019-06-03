@@ -24,11 +24,17 @@ class HelpController extends Controller
 
     public function imprint()
     {
+        if (config('help.imprint_redirect')) {
+            return redirect(config('help.imprint_redirect'));
+        }
         return view('help.imprint');
     }
 
     public function privacy()
     {
+        if (config('help.privacy_redirect')) {
+            return redirect(config('help.privacy_redirect'));
+        }
         return view('help.privacy');
     }
 }
