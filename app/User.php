@@ -4,6 +4,7 @@ namespace App;
 
 use App\Mail\PasswordReset;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Mail;
@@ -85,6 +86,11 @@ class User extends Authenticatable
     public function publishes()
     {
         return $this->hasMany(Publish::class);
+    }
+
+    public function oauthIdentities(): HasMany
+    {
+        return $this->hasMany(OAuthIdentities::class);
     }
 
     public function verified()

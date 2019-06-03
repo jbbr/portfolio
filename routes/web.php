@@ -1,6 +1,9 @@
 <?php
 Auth::routes();
 
+Route::get('oauth/{provider}/login', ['as' => 'oauth.login', 'uses' => 'Auth\LoginController@redirectToProvider']);
+Route::get('oauth/{provider}/callback', ['as' => 'oauth.callback', 'uses' => 'Auth\LoginController@handleProviderCallback']);
+
 Route::get('/help', ['as' => 'help', 'uses' => 'HelpController@help']);
 Route::get('/imprint', ['as' => 'imprint', 'uses' => 'HelpController@imprint']);
 Route::get('/privacy', ['as' => 'privacy', 'uses' => 'HelpController@privacy']);

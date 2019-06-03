@@ -22,6 +22,11 @@
             <div class="ui divider dotted"></div>
         </div>
         <div class="field">
+            <a href="{{ route('oauth.login', ['provider' => 'github']) }}" class="ui secondary button">
+                <i class="github icon"></i> Login mit Github
+            </a>
+        </div>
+        <div class="field">
             <a href="{{ route('register') }}">Registrieren</a>
         </div>
     </form>
