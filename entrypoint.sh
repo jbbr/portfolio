@@ -8,6 +8,10 @@ else
     php artisan key:generate
 fi
 
+perl -i -pe 's!(HELP_URL)\s*=.*!\1=$ENV{'HELP_URL'}!' .env
+perl -i -pe 's!(PRIVACY_URL)\s*=.*!\1=$ENV{'PRIVACY_URL'}!' .env
+perl -i -pe 's!(IMPRINT_URL)\s*=.*!\1=$ENV{'IMPRINT_URL'}!' .env
+
 php artisan storage:link
 php artisan migrate
 
