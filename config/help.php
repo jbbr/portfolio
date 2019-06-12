@@ -1,8 +1,12 @@
 <?php
 
-$url = 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe';
+$url = env('HELP_URL', 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe');
 
 return [
+    // redirects can be set, to overwrite pages with external links
+    'imprint_redirect' => env('IMPRINT_URL', false),
+    'privacy_redirect' => env('PRIVACY_URL', false),
+
     'dashboard' => $url . '/dashboard/hilfe_dashboard.html',
     'profile' => [
         'personal' => $url . '/profil/hilfe_profil_persoenlich.html',
