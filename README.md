@@ -11,7 +11,7 @@ mkdir ~/portfolio
 cd ~/portfolio
 ```
 
-#### Kopieren der folgenden Konfiguration in die Datei `docker-compose.yml` im Verzeichnis `~/portfolio`
+#### Kopieren der folgenden Konfiguration in die Datei `docker-compose.yml` im Verzeichnis `~/portfolio` 
 
 ```
 version: '2'
