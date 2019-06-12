@@ -1,6 +1,6 @@
 <?php
 
-$url = env('HELP_URL', 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe');
+$url = env('HELP_URL');
 
 return [
     // redirects can be set, to overwrite pages with external links
