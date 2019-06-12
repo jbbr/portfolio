@@ -56,7 +56,7 @@ services:
 
       - HELP_URL=https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe
       - IMPRINT_URL=/imprint
-      - PRIVACT_URL=/privacy
+      - PRIVACY_URL=/privacy
 
   db:
     image: mariadb
