@@ -349,7 +349,7 @@ $(function () {
         }
 
         var url = $(this).attr('href');
-        $('.sidebar').load('/help?url=' + url.replace('https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe', ''));
+        $('.sidebar').load('/help?url=/dashboard/hilfe_dashboard.html');
     });
 
     /* Export Buttons */
