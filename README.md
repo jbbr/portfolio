@@ -54,6 +54,9 @@ services:
       - MAIL_FROM_ADDRESS=team@ausbildungsportfolio.net
       - MAIL_FROM_NAME=Ausbildungsportfolio
 
+      - HELP_URL=https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe
+      - IMPRINT_URL=/imprint
+      - PRIVACT_URL=/privacy
 
   db:
     image: mariadb
