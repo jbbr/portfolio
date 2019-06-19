@@ -349,6 +349,10 @@ $(function () {
         }
 
         var url = $(this).attr('href');
+
+        //TODO: URL kürzen auf die letzten beiden Dashe
+
+        // $('.sidebar').load('/help?url='+url);
         $('.sidebar').load('/help?url=/dashboard/hilfe_dashboard.html');
     });
 
