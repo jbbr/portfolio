@@ -65,5 +65,14 @@ services:
     ports:
       - "8025:8025"
 
+  admin:
+    image: 'phpmyadmin/phpmyadmin'
+    ports:
+      - '8030:80'
+    depends_on:
+      - db
+    links:
+      - db
+
 volumes:
   db-data:
