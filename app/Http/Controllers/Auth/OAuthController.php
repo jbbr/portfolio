@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\OAuthIdentities;
 use App\User;
 use Auth;
+use Closure;
 use DB;
 use Exception;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
@@ -26,6 +27,23 @@ class OAuthController extends Controller
      */
     private $redirectTo = '/';
 
+    public function __construct()
+    {
+        $this->middleware(function (Request $request, Closure $next) {
+            // logout currently loggedin user if any
+            if (Auth::check()) {
+                Auth::logout();
+            }
+            // check if selected oauth provider is enabled
+            if (!in_array($request->provider, config('auth.oauth_login.providers'))) {
+                return redirect()
+                    ->route('login')
+                    ->withErrors(['message' => 'Loginprovider unbekannt']);
+            }
+            return $next($request);
+        });
+    }
+
     /**
      * Redirect the user to the authentication page of the OAuth Provider.
      *
@@ -34,12 +52,8 @@ class OAuthController extends Controller
      */
     public function login(Request $request)
     {
-        // logout currently loggedin user if any
-        if (Auth::check()) {
-            Auth::logout();
-        }
         try {
-            // start oauth auth
+            // start oauth flow (redirect to auth url)
             return Socialite::driver($request->provider)->redirect();
         } catch (Exception $e) {
             report($e);
@@ -52,6 +66,7 @@ class OAuthController extends Controller
     /**
      * Obtain the user information from OAuth Provider.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function callback(Request $request)
@@ -68,20 +83,6 @@ class OAuthController extends Controller
 
         Auth::loginUsingId($userId);
         return redirect()->to($this->redirectTo);
-    }
-
-    /**
-     * Get a validator for incoming oauth user.
-     *
-     * @param  array $data
-     * @return ValidatorContract
-     */
-    private function validator(array $data): ValidatorContract
-    {
-        return Validator::make($data, [
-            'name' => 'max:255',
-            'email' => 'nullable|email|max:255|unique:users',
-        ]);
     }
 
     private function connectUser(string $provider, SocialUser $socialUser): int
@@ -118,5 +119,19 @@ class OAuthController extends Controller
         });
 
         return $user->getKey();
+    }
+
+    /**
+     * Get a validator for incoming oauth user.
+     *
+     * @param  array $data
+     * @return ValidatorContract
+     */
+    private function validator(array $data): ValidatorContract
+    {
+        return Validator::make($data, [
+            'name' => 'max:255',
+            'email' => 'nullable|email|max:255|unique:users',
+        ]);
     }
 }
