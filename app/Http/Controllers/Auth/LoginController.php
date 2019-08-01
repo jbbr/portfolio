@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\OAuthIdentities;
 use App\User;
+use Auth;
 use DB;
 use Exception;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
@@ -43,7 +44,12 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('guest', [
+            'except' => [
+                'logout',
+                'redirectToProvider',
+            ],
+        ]);
     }
 
     public function credentials(Request $request)
@@ -58,14 +64,18 @@ class LoginController extends Controller
     /**
      * Redirect the user to the authentication page of the OAuth Provider.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function redirectToProvider()
+    public function redirectToProvider(Request $request)
     {
-        $provider = request('provider');
-
+        // logout currently loggedin user if any
+        if (Auth::check()) {
+            Auth::logout();
+        }
         try {
-            return Socialite::driver($provider)->redirect();
+            // start oauth auth
+            return Socialite::driver($request->provider)->redirect();
         } catch (Exception $e) {
             report($e);
             return redirect()
@@ -79,11 +89,10 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(Request $request)
     {
-        $provider = request('provider');
         try {
-            $socialUser = Socialite::driver($provider)->user();
+            $socialUser = Socialite::driver($request->provider)->user();
         } catch (Exception $e) {
             report($e);
             return redirect()
@@ -91,7 +100,7 @@ class LoginController extends Controller
                 ->withErrors(['message' => 'Fehler beim Login.']);
         }
 
-        $userId = $this->connectUser($provider, $socialUser);
+        $userId = $this->connectUser($request->provider, $socialUser);
         $this->guard()->loginUsingId($userId);
 
         return redirect()->to($this->redirectTo);
