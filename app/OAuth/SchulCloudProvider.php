@@ -83,13 +83,9 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
      */
     protected function mapUserToObject(array $user)
     {
-        // TODO: For now a fake email address is created, until userinfo endpoint provides real email
         return (new User)->setRaw($user)->map([
             'id' => $user['sub'],
-            'email' => 'oauth_' . str_random(10) . '@example.com',
             'name' => 'Schul-Cloud User',
-            // 'email' => $user['email'],
-            // 'name' => $user['name'],
         ]);
     }
 

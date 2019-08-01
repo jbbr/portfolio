@@ -22,6 +22,7 @@
                 {{ $user->name }}
             </div>
         </div>
+        @if(!is_null($user->email))
         <div class="row">
             <div class="four wide column">
                 <label>E-Mail</label>
@@ -30,6 +31,7 @@
                 {{ $user->email }}
             </div>
         </div>
+        @endif
         <div class="row">
             <div class="four wide column">
                 <label>Beruf</label>

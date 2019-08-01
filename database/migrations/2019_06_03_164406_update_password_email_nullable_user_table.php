@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdatePasswordColNullableUserTable extends Migration
+class UpdatePasswordEmailNullableUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,6 +15,7 @@ class UpdatePasswordColNullableUserTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('password')->nullable()->change();
+            $table->string('email')->nullable()->change();
         });
     }
 
@@ -27,6 +28,7 @@ class UpdatePasswordColNullableUserTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('password')->nullable(false)->change();
+            $table->string('email')->nullable(false)->change();
         });
     }
 }

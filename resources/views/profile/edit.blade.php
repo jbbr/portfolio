@@ -48,6 +48,7 @@
                     <input type="text" value="{{ $user->name }}" id="name" name="name">
                 </div>
             </div>
+            @if(!is_null($user->email))
             <div class="row">
                 <div class="four wide column">
                     <label>E-Mail</label>
@@ -58,6 +59,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             <div class="row">
                 <div class="four wide column">
                     <label for="profession">Beruf</label>

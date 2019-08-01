@@ -58,6 +58,7 @@ class OAuthController extends Controller
     {
         try {
             $socialUser = Socialite::driver($request->provider)->user();
+            $userId = $this->connectUser($request->provider, $socialUser);
         } catch (Exception $e) {
             report($e);
             return redirect()
@@ -65,9 +66,7 @@ class OAuthController extends Controller
                 ->withErrors(['message' => 'Fehler beim Login.']);
         }
 
-        $userId = $this->connectUser($request->provider, $socialUser);
         Auth::loginUsingId($userId);
-
         return redirect()->to($this->redirectTo);
     }
 
@@ -80,13 +79,13 @@ class OAuthController extends Controller
     private function validator(array $data): ValidatorContract
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'name' => 'max:255',
+            'email' => 'nullable|email|max:255|unique:users',
         ]);
     }
 
-    private function connectUser(string $provider, SocialUser $socialUser): int {
-
+    private function connectUser(string $provider, SocialUser $socialUser): int
+    {
         // lookup user with oauth identify
         $identity = OAuthIdentities::query()
             ->where('provider', $provider)
@@ -109,7 +108,6 @@ class OAuthController extends Controller
         ];
 
         // validate new user -> including uniqueness of email
-        // TODO: FIX VALIDATOR REDIRECT
         $this->validator($userData)->validate();
 
         $user = null;

@@ -7,8 +7,8 @@
     @include('partials.flash')
     <h1>Login</h1>
     <form class="ui form" method="POST" action="{{ route('login') }}">
-        @if(config('auth.password_login.enabled'))
         {{ csrf_field() }}
+        @if(config('auth.password_login.enabled'))
         <div class="field {{ $errors->has('email') ? 'error' : null }}">
             <input type="text" name="email" placeholder="E-Mail" required autofocus value="{{ old('email') }}">
         </div>
