@@ -135,6 +135,7 @@ class LoginController extends Controller
         ];
 
         // validate new user -> including uniqueness of email
+        // TODO: FIX VALIDATOR REDIRECT
         $this->validator($userData)->validate();
 
         $user = null;
@@ -143,6 +144,7 @@ class LoginController extends Controller
             $user = User::create($userData);
             $user->oauthIdentities()->create($identityData);
         });
+
         return $user->getKey();
     }
 }

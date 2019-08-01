@@ -2,6 +2,7 @@
 
 namespace App\OAuth;
 
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
@@ -38,7 +39,7 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase($this->buildUrl('auth'), $state);
+        return $this->buildAuthUrlFromBase($this->buildUrl('oauth2/auth'), $state);
     }
 
     /**
@@ -48,7 +49,7 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        return $this->buildUrl('token');
+        return $this->buildUrl('oauth2/token');
     }
 
     /**
@@ -61,9 +62,13 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
     {
         $userUrl = $this->buildUrl('userinfo');
         try {
-            $response = $this->getHttpClient()->get($userUrl, $this->getRequestOptions());
-        } catch (\Exception $e) {
-            \Log::error('Error while fetching userinfo', [$e]);
+            $response = $this->getHttpClient()->get($userUrl, $this->getRequestOptions($token));
+        } catch (ClientException $e) {
+            report($e);
+            Log::error('Error while fetching userinfo', [$e->getResponse()->getBody()->getContents()]);
+            throw $e;
+        } catch (\Throwable $e) {
+            report($e);
             return;
         }
 
@@ -78,24 +83,35 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
      */
     protected function mapUserToObject(array $user)
     {
+        // TODO: For now a fake email address is created, until userinfo endpoint provides real email
         return (new User)->setRaw($user)->map([
             'id' => $user['sub'],
-            'email' => $user['email'],
-            'name' => $user['name'],
+            'email' => 'oauth_' . str_random(10) . '@example.com',
+            'name' => 'Schul-Cloud User',
+            // 'email' => $user['email'],
+            // 'name' => $user['name'],
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTokenFields($code)
+    {
+        return parent::getTokenFields($code) + ['grant_type' => 'authorization_code'];
     }
 
     private function getRequestOptions($token): array
     {
         return [
             'headers' => [
-                'Bearer' => $token,
+                'Authorization' => 'Bearer ' . $token,
             ],
         ];
     }
 
     private function buildUrl(string $path): string
     {
-        return $this->hydraUrl . '/oauth2/' . $path;
+        return $this->hydraUrl . '/' . $path;
     }
 }
