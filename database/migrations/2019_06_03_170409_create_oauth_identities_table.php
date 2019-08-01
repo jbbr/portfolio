@@ -18,6 +18,10 @@ class CreateOAuthIdentitiesTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('provider_user_id');
             $table->string('provider');
+            $table
+                ->json('data')
+                ->nullable()
+                ->comment('Arbitrary data from provider');
             $table->timestamps();
         });
     }

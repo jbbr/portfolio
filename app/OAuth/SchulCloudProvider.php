@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
+use Log;
 
 class SchulCloudProvider extends AbstractProvider implements ProviderInterface
 {
@@ -86,6 +87,7 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
         return (new User)->setRaw($user)->map([
             'id' => $user['sub'],
             'name' => 'Schul-Cloud User',
+            'iframe' => isset($user['iframe']) ? $user['iframe'] : null,
         ]);
     }
 

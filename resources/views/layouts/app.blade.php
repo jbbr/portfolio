@@ -22,6 +22,9 @@
     </div>
 </div>
 <div class="pusher">
+    @if(config('auth.oauth_login.enabled'))
+        @include('partials.schulcloudframe')
+    @endif
     @include('partials.header')
     @include('partials.loader')
     <div class="content-wrapper">

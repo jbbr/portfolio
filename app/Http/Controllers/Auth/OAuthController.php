@@ -12,7 +12,7 @@ use Exception;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
-use Laravel\Socialite\Contracts\User as SocialUser;
+use Laravel\Socialite\AbstractUser;
 use Laravel\Socialite\Facades\Socialite;
 use Validator;
 
@@ -85,7 +85,7 @@ class OAuthController extends Controller
         return redirect()->to($this->redirectTo);
     }
 
-    private function connectUser(string $provider, SocialUser $socialUser): int
+    private function connectUser(string $provider, AbstractUser $socialUser): int
     {
         // lookup user with oauth identify
         $identity = OAuthIdentities::query()
@@ -106,6 +106,8 @@ class OAuthController extends Controller
         $identityData = [
             'provider' => $provider,
             'provider_user_id' => $socialUser->getId(),
+            // store custom Schul-Cloud "iframe" attribute
+            'data' => $socialUser->offsetExists('iframe') ? ['iframe' => $socialUser->offsetGet('iframe')] : null,
         ];
 
         // validate new user -> including uniqueness of email
