@@ -147,6 +147,7 @@
                     </div>
                 </div>
             </div>
+            @if(config('auth.password_login.enabled'))
             <div class="row">
                 <div class="four wide column">
                     <label for="password">Passwort</label>
@@ -155,6 +156,7 @@
                     <a href="{{ route('password.edit') }}">Passwort ändern</a>
                 </div>
             </div>
+            @endif
             <div class="row">
                 <div class="four wide column">
                 </div>

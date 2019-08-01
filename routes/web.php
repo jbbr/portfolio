@@ -1,8 +1,19 @@
 <?php
-Auth::routes();
 
-Route::get('oauth/{provider}/login', ['as' => 'oauth.login', 'uses' => 'Auth\LoginController@redirectToProvider']);
-Route::get('oauth/{provider}/callback', ['as' => 'oauth.callback', 'uses' => 'Auth\LoginController@handleProviderCallback']);
+if (config('auth.oauth_login.enabled')) {
+    Route::get('oauth/{provider}/login', ['as' => 'oauth.login', 'uses' => 'Auth\OAuthController@login']);
+    Route::get('oauth/{provider}/callback', ['as' => 'oauth.callback', 'uses' => 'Auth\OAuthController@callback']);
+}
+
+if (config('auth.password_login.enabled')) {
+    Auth::routes();
+    Route::get('/register/success', ['as' => 'register.success', 'uses' => 'Auth\RegisterController@registersuccess']);
+    Route::get('/register/verify/{token}', ['as' => 'register.verify', 'uses' => 'Auth\RegisterController@verify']);
+} else {
+    // login/logout routes are required for OAuth login
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+}
 
 Route::get('/help', ['as' => 'help', 'uses' => 'HelpController@help']);
 Route::get('/imprint', ['as' => 'imprint', 'uses' => 'HelpController@imprint']);
@@ -11,10 +22,6 @@ Route::get('/privacy', ['as' => 'privacy', 'uses' => 'HelpController@privacy']);
 Route::get('/', function () {
     return redirect(route('portfolios.index'));
 })->name('index');
-
-Route::get('/register/success', ['as' => 'register.success', 'uses' => 'Auth\RegisterController@registersuccess']);
-Route::get('/register/verify/{token}', ['as' => 'register.verify', 'uses' => 'Auth\RegisterController@verify']);
-
 
 Route::group(['prefix' => 'publish'], function () {
 

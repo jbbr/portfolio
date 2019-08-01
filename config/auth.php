@@ -3,6 +3,22 @@
 return [
 
     /*
+     * Configure OAuth login options.
+     * Specific Providers are configured in config/services.php
+     */
+    'oauth_login' => [
+        // enable login using OAuth Providers
+        'enabled' => env('OAUTH_LOGIN_ENABLED', false),
+        // enabled providers
+        'providers' => ['schulcloud'],
+    ],
+
+    'password_login' => [
+        // enable login & registration with email/password
+        'enabled' => env('PW_LOGIN_ENABLED', true),
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
     |--------------------------------------------------------------------------
