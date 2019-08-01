@@ -42,4 +42,11 @@ return [
         'redirect' => env('APP_URL') . '/oauth/github/callback',
     ],
 
+    'schulcloud' => [
+        'client_id' => env('SCHULCLOUD_CLIENT_ID'),
+        'client_secret' => env('SCHULCLOUD_CLIENT_SECRET'),
+        'hydra_url' => env('SCHULCLOUD_HYDRA_URL', 'https://schul-cloud.org/hydra'),
+        'redirect' => env('APP_URL') . '/oauth/schulcloud/callback',
+    ],
+
 ];

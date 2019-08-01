@@ -22,8 +22,8 @@
             <div class="ui divider dotted"></div>
         </div>
         <div class="field">
-            <a href="{{ route('oauth.login', ['provider' => 'github']) }}" class="ui secondary button">
-                <i class="github icon"></i> Login mit Github
+            <a href="{{ route('oauth.login', ['provider' => 'schulcloud']) }}" class="ui secondary button">
+                <i class="cloud icon"></i> Login mit Schulcloud
             </a>
         </div>
         <div class="field">
