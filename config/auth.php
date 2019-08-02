@@ -9,7 +9,7 @@ return [
     'oauth_login' => [
         // enable login using OAuth Providers
         'enabled' => env('OAUTH_LOGIN_ENABLED', false),
-        // enabled providers
+        // allowed socialite providers
         'providers' => ['schulcloud'],
     ],
 

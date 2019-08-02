@@ -45,6 +45,9 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
     }
 
+    /**
+     * Register custom Providers with Laravel Socialite (OAuth/OAuth2)
+     */
     private function registerOAuthProviders()
     {
         $this->app->resolving(SocialiteManager::class, function (SocialiteManager $socialite) {

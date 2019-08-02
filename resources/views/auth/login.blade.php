@@ -26,7 +26,7 @@
         @if(config('auth.oauth_login.enabled'))
         <div class="field">
             <a href="{{ route('oauth.login', ['provider' => 'schulcloud']) }}" class="ui secondary button">
-                <i class="cloud icon"></i> Login mit Schulcloud
+                <i class="cloud icon"></i> Login mit Schul-Cloud
             </a>
         </div>
         @endif

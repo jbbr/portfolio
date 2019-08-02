@@ -9,6 +9,15 @@ use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
 use Log;
 
+/**
+ * Class SchulCloudProvider
+ *
+ * Add Schul-Cloud/Hydra Support to Laravel Socialite,
+ * Apart from custom iframe-Support, this Provider should
+ * also work with other OpenID Connect endpoints
+ *
+ * @package App\OAuth
+ */
 class SchulCloudProvider extends AbstractProvider implements ProviderInterface
 {
     /**
@@ -26,8 +35,8 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
         $clientSecret,
         $redirectUrl,
         $guzzle = [],
-        $hydraUrl = 'https://schul-cloud.org/hydra')
-    {
+        $hydraUrl = 'https://schul-cloud.org/hydra'
+    ) {
         parent::__construct($request, $clientId, $clientSecret, $redirectUrl, $guzzle);
         $this->hydraUrl = $hydraUrl;
     }
@@ -87,6 +96,7 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
         return (new User)->setRaw($user)->map([
             'id' => $user['sub'],
             'name' => 'Schul-Cloud User',
+            // custom fields for Schul-Cloud iframe integration
             'iframe' => isset($user['iframe']) ? $user['iframe'] : null,
         ]);
     }
