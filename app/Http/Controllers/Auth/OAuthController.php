@@ -87,6 +87,9 @@ class OAuthController extends Controller
 
     private function connectUser(string $provider, AbstractUser $socialUser): int
     {
+        // custom Schul-Cloud "iframe" attribute, stored in JSON column
+        $data = $socialUser->offsetExists('iframe') ? ['iframe' => $socialUser->offsetGet('iframe')] : null;
+
         // lookup user with oauth identify
         $identity = OAuthIdentities::query()
             ->where('provider', $provider)
@@ -94,6 +97,9 @@ class OAuthController extends Controller
             ->first();
 
         if ($identity) {
+            // make sure iframe data gets updated
+            $identity->data = $data;
+            $identity->save();
             return $identity->user_id;
         }
 
@@ -106,8 +112,7 @@ class OAuthController extends Controller
         $identityData = [
             'provider' => $provider,
             'provider_user_id' => $socialUser->getId(),
-            // store custom Schul-Cloud "iframe" attribute
-            'data' => $socialUser->offsetExists('iframe') ? ['iframe' => $socialUser->offsetGet('iframe')] : null,
+            'data' => $data,
         ];
 
         // validate new user -> including uniqueness of email
