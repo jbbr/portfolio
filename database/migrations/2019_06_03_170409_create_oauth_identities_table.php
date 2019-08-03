@@ -23,6 +23,9 @@ class CreateOAuthIdentitiesTable extends Migration
                 ->nullable()
                 ->comment('Arbitrary data from provider');
             $table->timestamps();
+
+            // foreign key references
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

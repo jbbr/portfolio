@@ -148,6 +148,7 @@ class User extends Authenticatable
         $this->entries()->delete();
         $this->portfolios()->delete();
         $this->mediaInfos()->delete();
+        $this->oauthIdentities()->delete();
 
         return parent::delete();
     }
