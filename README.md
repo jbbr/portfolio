@@ -111,3 +111,26 @@ docker-compose up
 - Unter `localhost:8030` findet sich die Anwendung *phpMyAdmin*
 - Mit den Zugangsdaten anmelden, die in der Datei `docker-compose.yml` für den Zugang zur Datenbank definiert sind
 - In der Tabelle `portfolio.users` dem gewünschten Account im Feld `is_admin` eine `1` eintragen
+
+#### OAuth-Login mit der Schul-Cloud
+
+Ergänzend (oder alternativ) zum Login per E-Mail/Passwort kann ein Single Sign-on mit einer [Schul-Cloud Instanz](https://github.com/schul-cloud/schulcloud-server)
+eingerichtet werden.
+
+Dafür sind folgende Umgebungsvariablen zu definieren:
+
+- `SCHULCLOUD_HYDRA_URL=https://schul-cloud.org/hydra`   
+URL zum Hydra/OpenID-Connect Endpunkt der Schul-Cloud
+- `SCHULCLOUD_CLIENT_ID=portfolio`  
+OAuth Client-ID für die Portfolio-Instanz
+- `SCHULCLOUD_CLIENT_SECRET=SECRET`  
+OAuth Client-Secret für die Portfolio-Instanz
+- `OAUTH_LOGIN_ENABLED=true`  
+Aktivieren des Logins per Schul-Cloud
+- `PW_LOGIN_ENABLED=false`  
+Optional: Deaktivieren des Logins per E-Mail/Passwort
+
+Die Redirect-URL ist `http(s)://<url-zum-portfolio>/oauth/schulcloud/callback`.  
+
+Für die iFrame/Tool-Integration in die Schul-Cloud kann folgender Direkt-Link verwendet werden.
+Dieser führt zum sofortigen Login über die Schul-Cloud: `http(s)://<url-zum-portfolio>/oauth/schulcloud/login`. 
