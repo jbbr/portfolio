@@ -37,6 +37,10 @@ services:
       - MAIL_ENCRYPTION=null
       - MAIL_FROM_ADDRESS=team@ausbildungsportfolio.net
       - MAIL_FROM_NAME=Ausbildungsportfolio
+      
+      - HELP_URL=https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe
+      - IMPRINT_URL=/imprint
+      - PRIVACY_URL=/privacy
 
 
   db:
@@ -60,6 +64,15 @@ services:
     image: mailhog/mailhog
     ports:
       - "8025:8025"
+
+  admin:
+    image: 'phpmyadmin/phpmyadmin'
+    ports:
+      - '8030:80'
+    depends_on:
+      - db
+    links:
+      - db
 
 volumes:
   db-data:

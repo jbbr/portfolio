@@ -1,4 +1,4 @@
-version: '2'
+version: '2.2'
 
 services:
   app:
@@ -21,6 +21,10 @@ services:
       APP_DEBUG: 'true'
       APP_LOG_LEVEL: 'debug'
       APP_URL: 'http://localhost'
+
+      HELP_URL: 'https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe'
+      IMPRINT_URL: '/imprint'
+      PRIVACY_URL: '/privacy'
 
       DB_CONNECTION: 'mysql'
       DB_HOST: 'db'

@@ -11,7 +11,7 @@ mkdir ~/portfolio
 cd ~/portfolio
 ```
 
-#### Kopieren der folgenden Konfiguration in die Datei `docker-compose.yml` im Verzeichnis `~/portfolio`
+#### Kopieren der folgenden Konfiguration in die Datei `docker-compose.yml` im Verzeichnis `~/portfolio` 
 
 ```
 version: '2'
@@ -54,6 +54,9 @@ services:
       - MAIL_FROM_ADDRESS=team@ausbildungsportfolio.net
       - MAIL_FROM_NAME=Ausbildungsportfolio
 
+      - HELP_URL=https://fizban05.rz.tu-harburg.de/itbh/portfolio-team/portfolio-hilfe
+      - IMPRINT_URL=/imprint
+      - PRIVACY_URL=/privacy
 
   db:
     image: mariadb
