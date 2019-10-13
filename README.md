@@ -132,6 +132,8 @@ OAuth Client-Secret für die Portfolio-Instanz
 Aktivieren des Logins per Schul-Cloud
 - `PW_LOGIN_ENABLED=false`  
 Optional: Deaktivieren des Logins per E-Mail/Passwort
+- `SCHULCLOUD_LOGIN_BUTTON_TEXT="Login mit MusterCloud"`  
+Optional: Ändern der Beschriftung des "Login mit Schul-Cloud"-Buttons
 
 Die Redirect-URL ist `http(s)://<url-zum-portfolio>/oauth/schulcloud/callback`.  
 

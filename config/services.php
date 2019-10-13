@@ -41,5 +41,7 @@ return [
         'client_secret' => env('SCHULCLOUD_CLIENT_SECRET'),
         'hydra_url' => env('SCHULCLOUD_HYDRA_URL', 'https://schul-cloud.org/hydra'),
         'redirect' => env('APP_URL') . '/oauth/schulcloud/callback',
+
+        'login_button_text' => env('SCHULCLOUD_LOGIN_BUTTON_TEXT', 'Login mit Schul-Cloud'),
     ],
 ];
