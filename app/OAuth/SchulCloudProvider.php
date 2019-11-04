@@ -95,7 +95,7 @@ class SchulCloudProvider extends AbstractProvider implements ProviderInterface
     {
         return (new User)->setRaw($user)->map([
             'id' => $user['sub'],
-            'name' => 'Schul-Cloud User',
+            'name' => config('services.schulcloud.whitelabel_name') . ' User',
             // custom fields for Schul-Cloud iframe integration
             'iframe' => isset($user['iframe']) ? $user['iframe'] : null,
         ]);

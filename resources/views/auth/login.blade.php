@@ -26,7 +26,7 @@
         @if(config('auth.oauth_login.enabled'))
         <div class="field">
             <a href="{{ route('oauth.login', ['provider' => 'schulcloud']) }}" class="ui secondary button">
-                <i class="cloud icon"></i> {{ config('services.schulcloud.login_button_text') }}
+                <i class="cloud icon"></i>Login mit {{ config('services.schulcloud.whitelabel_name') }}
             </a>
         </div>
         @endif
